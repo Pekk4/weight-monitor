@@ -1,5 +1,7 @@
 # Weight Monitor (MVP)
 
+This is a test-project for agentic AI development.
+
 This workspace contains a minimal fullstack TypeScript app for tracking daily morning weight.
 
 - `server` — Express + TypeScript backend using SQLite (`sqlite` + `sqlite3`).

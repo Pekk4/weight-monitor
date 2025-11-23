@@ -1,22 +1,39 @@
-FROM node:18-alpine AS builder
+FROM --platform=$BUILDPLATFORM node:18-bullseye-slim AS builder
 
 WORKDIR /usr/src/app
 
-# install dev deps to build TypeScript
+# Install system build deps required to compile native modules (sqlite3)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  python3 \
+  python3-dev \
+  build-essential \
+  pkg-config \
+  libsqlite3-dev \
+  ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV npm_config_python=/usr/bin/python3
+
+# install deps and build
 COPY package.json package-lock.json* ./
-# Prefer `npm ci` for reproducible installs, but fall back to `npm install`
 RUN npm ci || npm install
 
 COPY . .
 RUN npm run build
 
-FROM node:18-alpine
+FROM node:18-bullseye-slim
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
 
+# runtime dependencies for sqlite3
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  libsqlite3-0 \
+  ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY package.json package-lock.json* ./
 # For production, prefer `npm ci --production` but fall back to `npm install --production`
-RUN npm ci --production || npm install --production
+RUN npm ci --omit=dev --silent || npm install --production --silent
 
 COPY --from=builder /usr/src/app/dist ./dist
 

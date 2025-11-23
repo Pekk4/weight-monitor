@@ -20,6 +20,8 @@ RUN npm ci || npm install
 
 COPY . .
 RUN npm run build
+# remove devDependencies so only production deps remain
+RUN npm prune --production
 
 FROM node:18-bullseye-slim
 WORKDIR /usr/src/app
@@ -32,9 +34,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json* ./
-# For production, prefer `npm ci --production` but fall back to `npm install --production`
-RUN npm ci --omit=dev --silent || npm install --production --silent
-
+# Copy preinstalled production node_modules from builder (avoids running npm in final image)
+COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
 
 # ensure data directory exists and is writable

@@ -9,11 +9,13 @@ export default function WeightList({ weights }: { weights: Weight[] }) {
         <div className="row header">
           <div>Date</div>
           <div>Weight (kg)</div>
+          <div>Waist (cm)</div>
         </div>
         {weights.slice().reverse().map((w) => (
           <div className="row" key={w.date}>
             <div>{w.date}</div>
             <div>{w.weight.toFixed(1)}</div>
+            <div>{w.waist ? w.waist.toFixed(1) : '-'}</div>
           </div>
         ))}
       </div>

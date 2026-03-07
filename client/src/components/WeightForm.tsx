@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
 
-type Props = { onSave: (date: string | undefined, weight: number) => Promise<void> };
+type Props = { onSave: (date: string | undefined, weight: number, waist?: number) => Promise<void> };
 
 export default function WeightForm({ onSave }: Props) {
   const [weightText, setWeightText] = useState<string>('');
+  const [waistText, setWaistText] = useState<string>('');
   const [date, setDate] = useState<string>(dayjs().format('YYYY-MM-DD'));
   const [saving, setSaving] = useState(false);
 
@@ -12,10 +13,12 @@ export default function WeightForm({ onSave }: Props) {
     e.preventDefault();
     const w = parseFloat(weightText);
     if (Number.isNaN(w)) return;
+    const waist = parseFloat(waistText);
     setSaving(true);
     try {
-      await onSave(date, w);
+      await onSave(date, w, !Number.isNaN(waist) ? waist : undefined);
       setWeightText('');
+      setWaistText('');
     } finally {
       setSaving(false);
     }
@@ -38,6 +41,19 @@ export default function WeightForm({ onSave }: Props) {
           placeholder="kg"
           value={weightText}
           onChange={(e) => setWeightText(e.target.value)}
+        />
+      </div>
+
+      <div className="row">
+        <label htmlFor="waist">Waist</label>
+        <input
+          id="waist"
+          type="number"
+          step="0.1"
+          inputMode="decimal"
+          placeholder="cm"
+          value={waistText}
+          onChange={(e) => setWaistText(e.target.value)}
         />
       </div>
 

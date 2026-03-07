@@ -4,7 +4,7 @@ import WeightForm from './components/WeightForm';
 import WeightList from './components/WeightList';
 import WeightChart from './components/WeightChart';
 
-export type Weight = { date: string; weight: number; created_at?: string };
+export type Weight = { date: string; weight: number; waist?: number; created_at?: string };
 
 function App() {
   const [weights, setWeights] = useState<Weight[]>([]);
@@ -18,8 +18,8 @@ function App() {
     load();
   }, []);
 
-  const handleSave = async (date: string | undefined, weight: number) => {
-    await axios.post('/api/weights', { date, weight });
+  const handleSave = async (date: string | undefined, weight: number, waist?: number) => {
+    await axios.post('/api/weights', { date, weight, waist });
     await load();
   };
 

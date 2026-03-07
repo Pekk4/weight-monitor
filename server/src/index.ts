@@ -22,15 +22,16 @@ app.get('/api/weights', async (req, res) => {
 });
 
 app.post('/api/weights', async (req, res) => {
-  const { date, weight } = req.body;
+  const { date, weight, waist } = req.body;
   if (typeof weight !== 'number' || Number.isNaN(weight)) {
     res.status(400).json({ error: 'weight must be a number' });
     return;
   }
+  const parsedWaist = typeof waist === 'number' && !Number.isNaN(waist) ? waist : null;
   const usedDate = date ? String(date) : dayjs().format('YYYY-MM-DD');
   try {
-    await upsertWeight(usedDate, weight);
-    res.status(201).json({ date: usedDate, weight });
+    await upsertWeight(usedDate, weight, parsedWaist);
+    res.status(201).json({ date: usedDate, weight, waist: parsedWaist });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'failed to save weight' });

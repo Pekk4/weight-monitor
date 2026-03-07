@@ -10,7 +10,7 @@ if (!fs.existsSync(dataDir)) {
 }
 const dbPath = path.join(dataDir, 'data.db');
 
-export type WeightRow = { date: string; weight: number; created_at: string };
+export type WeightRow = { date: string; weight: number; waist?: number; created_at: string };
 
 let db: Database<sqlite3.Database, sqlite3.Statement> | null = null;
 
@@ -24,22 +24,28 @@ export async function initDB() {
       created_at TEXT NOT NULL
     )`
   );
+  try {
+    await db.run('ALTER TABLE weights ADD COLUMN waist REAL');
+  } catch (err) {
+    // column already exists
+  }
 }
 
 export async function getAllWeights(): Promise<WeightRow[]> {
   if (!db) throw new Error('DB not initialized');
-  return db.all<WeightRow[]>('SELECT date, weight, created_at FROM weights ORDER BY date ASC');
+  return db.all<WeightRow[]>('SELECT date, weight, waist, created_at FROM weights ORDER BY date ASC');
 }
 
-export async function upsertWeight(date: string, weight: number) {
+export async function upsertWeight(date: string, weight: number, waist?: number | null) {
   if (!db) throw new Error('DB not initialized');
   const now = new Date().toISOString();
   // Use UPSERT via ON CONFLICT
   await db.run(
-    `INSERT INTO weights(date, weight, created_at) VALUES (?, ?, ?)
-     ON CONFLICT(date) DO UPDATE SET weight=excluded.weight, created_at=excluded.created_at`,
+    `INSERT INTO weights(date, weight, waist, created_at) VALUES (?, ?, ?, ?)
+     ON CONFLICT(date) DO UPDATE SET weight=excluded.weight, waist=excluded.waist, created_at=excluded.created_at`,
     date,
     weight,
+    waist ?? null,
     now
   );
 }

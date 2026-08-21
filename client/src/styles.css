@@ -18,6 +18,11 @@ main{display:block;gap:16px}
 .weight-form .actions{justify-content:flex-end}
 .weight-form button{background:var(--accent);color:white;padding:8px 14px;border-radius:8px;border:none}
 .chart{background:var(--card);padding:12px;border-radius:8px;margin:12px 0}
+.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.chart-head h2{margin:0}
+.chart-toggle{display:flex;gap:6px;background:#f3f4f6;padding:4px;border-radius:10px}
+.chart-toggle button{border:none;background:transparent;color:#374151;padding:6px 10px;border-radius:8px;font-size:0.85rem;cursor:pointer}
+.chart-toggle button.active{background:var(--accent);color:#fff}
 .stats{background:var(--card);padding:12px;border-radius:8px;margin:12px 0}
 .stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .stats-item{border:1px solid #e5e7eb;border-radius:8px;padding:10px;background:#f8fafc}
@@ -33,5 +38,7 @@ main{display:block;gap:16px}
 @media (max-width:480px){
   .app{padding:10px}
   .weight-form label{width:4rem}
+  .chart-toggle{width:100%}
+  .chart-toggle button{flex:1}
   .stats-grid{grid-template-columns:1fr}
 }

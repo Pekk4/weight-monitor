@@ -3,6 +3,7 @@ import axios from 'axios';
 import WeightForm from './components/WeightForm';
 import WeightList from './components/WeightList';
 import WeightChart from './components/WeightChart';
+import WeightStats from './components/WeightStats';
 
 export type Weight = { date: string; weight: number; waist?: number; created_at?: string };
 
@@ -30,6 +31,7 @@ function App() {
       </header>
       <main>
         <WeightForm onSave={handleSave} />
+        <WeightStats weights={weights} />
         <WeightChart weights={weights} />
         <WeightList weights={weights} />
       </main>

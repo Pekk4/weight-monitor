@@ -18,6 +18,11 @@ main{display:block;gap:16px}
 .weight-form .actions{justify-content:flex-end}
 .weight-form button{background:var(--accent);color:white;padding:8px 14px;border-radius:8px;border:none}
 .chart{background:var(--card);padding:12px;border-radius:8px;margin:12px 0}
+.stats{background:var(--card);padding:12px;border-radius:8px;margin:12px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stats-item{border:1px solid #e5e7eb;border-radius:8px;padding:10px;background:#f8fafc}
+.stats-item h3{margin:0;color:var(--muted);font-size:0.85rem;font-weight:600}
+.stats-item p{margin:6px 0 0;font-size:1.1rem;font-weight:700}
 .list{background:var(--card);padding:12px;border-radius:8px;margin:12px 0}
 .table{display:block}
 .table .row{display:grid;grid-template-columns:1.5fr 1fr 1fr;padding:8px 0;border-bottom:1px dashed #f0f0f0}
@@ -28,4 +33,5 @@ main{display:block;gap:16px}
 @media (max-width:480px){
   .app{padding:10px}
   .weight-form label{width:4rem}
+  .stats-grid{grid-template-columns:1fr}
 }
